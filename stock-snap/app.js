@@ -1,4 +1,4 @@
-const API_KEY = " BG5QGZ2MODXC8F4R";
+const API_KEY = "BG5QGZ2MODXC8F4R";
 
 
 async function getStock(symbol) {
