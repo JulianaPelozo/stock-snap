@@ -1,62 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StockSnap</title>
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#9e21e6">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoSnap</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <header>
-    <h1>StockSnap</h1>
-    <p>Acompanhe ações e registre sua localização e fotos</p>
-  </header>
+  <h1>🌍 GeoSnap</h1>
 
-  <main>
-    <section class="card">
-      <h2>🔍 Buscar Ação</h2>
-      <input type="text" id="symbol" placeholder="Ex: AAPL, MSFT, PETR4">
-      <button id="btnStock">Buscar Ação</button>
-      <canvas id="stockChart"></canvas>
-    </section>
+  <section class="geo">
+    <h2>📍 Localização</h2>
+    <p id="geoStatus">Obtendo localização...</p>
+    <p>Latitude: <span id="lat">--</span></p>
+    <p>Longitude: <span id="lng">--</span></p>
+    <p>Precisão: <span id="acc">--</span> m</p>
+    <a id="openMaps" href="#" target="_blank" class="map-link">Abrir no Google Maps</a>
 
-    <section class="card">
-      <h2>📍 Geolocalização</h2>
-      <p id="geoStatus">Clique para iniciar.</p>
-      <p><strong>Latitude:</strong> <span id="lat">-</span></p>
-      <p><strong>Longitude:</strong> <span id="lng">-</span></p>
-      <div class="btn-group">
-        <button id="btnStartGeo">Iniciar</button>
-        <button id="btnStopGeo" disabled>Parar</button>
-        <a id="openMaps" href="#" target="_blank">Abrir no Maps</a>
-      </div>
-    </section>
+    <div class="geo-buttons">
+      <button id="btnStartGeo">Iniciar</button>
+      <button id="btnStopGeo" disabled>Parar</button>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>📸 Captura de Foto</h2>
-      <video id="video" autoplay playsinline></video>
-      <canvas id="canvas" hidden></canvas>
-      <div class="btn-group">
-        <button id="btnStartCam">Abrir câmera</button>
-        <button id="btnCapture" disabled>Capturar</button>
-        <button id="btnStopCam" disabled>Fechar</button>
-      </div>
-      <h3>Última imagem:</h3>
-      <img id="lastImage" alt="Última foto" />
-    </section>
-  </main>
-
-  <footer>
-    <p>Feito com 💜 por Juliana • PWA Demo</p>
-  </footer>
+  <section class="camera">
+    <h2>📸 Câmera</h2>
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <div class="camera-buttons">
+      <button id="btnStartCam">Abrir Câmera</button>
+      <button id="btnCapture" disabled>Capturar</button>
+      <button id="btnStopCam" disabled>Fechar</button>
+    </div>
+    <img id="lastImage" alt="Última foto" />
+    <a id="downloadLink" href="#" download="foto.png" class="download-link">Baixar imagem</a>
+  </section>
 
   <script src="app.js"></script>
 </body>
-
 </html>

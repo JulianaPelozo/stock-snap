@@ -1,51 +1,14 @@
 const API_KEY = "BG5QGZ2MODXC8F4R";
 
-document.getElementById("btnStock").addEventListener("click", async () => {
-  const symbol = document.getElementById("symbol").value.toUpperCase();
-  if (!symbol) return alert("Digite um símbolo de ação!");
-
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${API_KEY}`;
-  const res = await fetch(url);
-  const data = await res.json();
-
-  if (data["Time Series (Daily)"]) {
-    const timeSeries = data["Time Series (Daily)"];
-    const dates = Object.keys(timeSeries).slice(0, 10).reverse();
-    const prices = dates.map(d => parseFloat(timeSeries[d]["4. close"]));
-    plotGraph(dates, prices, symbol);
-  } else {
-    alert("Erro ao buscar dados da ação.");
-  }
-});
-
-function plotGraph(labels, data, symbol) {
-  const ctx = document.getElementById("stockChart").getContext("2d");
-  if (window.stockChartInstance) window.stockChartInstance.destroy();
-
-  window.stockChartInstance = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels,
-      datasets: [{
-        label: `Preço de Fechamento - ${symbol}`,
-        data,
-        borderColor: "#9e21e6",
-        fill: false,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-}
-
+const stockForm = document.getElementById("stockForm");
+const stockInput = document.getElementById("stockInput");
+const stockResult = document.getElementById("stockResult");
 
 let watchId = null;
 const geoStatus = document.getElementById("geoStatus");
 const latEl = document.getElementById("lat");
 const lngEl = document.getElementById("lng");
+const accEl = document.getElementById("acc");
 const btnStartGeo = document.getElementById("btnStartGeo");
 const btnStopGeo = document.getElementById("btnStopGeo");
 const openMaps = document.getElementById("openMaps");
@@ -55,30 +18,31 @@ btnStartGeo.addEventListener("click", () => {
     geoStatus.textContent = "Geolocalização não suportada.";
     return;
   }
-  geoStatus.textContent = "Localizando...";
+  geoStatus.textContent = "Procurando posição...";
   watchId = navigator.geolocation.watchPosition(onGeoSuccess, onGeoError, {
     enableHighAccuracy: true,
-    timeout: 10000
+    maximumAge: 10000,
+    timeout: 10000,
   });
   btnStartGeo.disabled = true;
   btnStopGeo.disabled = false;
 });
 
 btnStopGeo.addEventListener("click", () => {
-  if (watchId) navigator.geolocation.clearWatch(watchId);
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId);
   watchId = null;
-  geoStatus.textContent = "Parado.";
+  geoStatus.textContent = "Localização parada.";
   btnStartGeo.disabled = false;
   btnStopGeo.disabled = true;
 });
 
 function onGeoSuccess(pos) {
-  const { latitude, longitude } = pos.coords;
+  const { latitude, longitude, accuracy } = pos.coords;
   latEl.textContent = latitude.toFixed(6);
   lngEl.textContent = longitude.toFixed(6);
-  geoStatus.textContent = "Localização atualizada.";
-  openMaps.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
-  localStorage.setItem("lastLocation", JSON.stringify({ latitude, longitude }));
+  accEl.textContent = accuracy.toFixed(1);
+  geoStatus.textContent = "Posição atualizada.";
+  openMaps.href = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
 }
 
 function onGeoError(err) {
@@ -91,40 +55,42 @@ const btnStartCam = document.getElementById("btnStartCam");
 const btnCapture = document.getElementById("btnCapture");
 const btnStopCam = document.getElementById("btnStopCam");
 const lastImage = document.getElementById("lastImage");
+const downloadLink = document.getElementById("downloadLink");
 let stream = null;
 
 btnStartCam.addEventListener("click", async () => {
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
     video.srcObject = stream;
     btnCapture.disabled = false;
     btnStopCam.disabled = false;
     btnStartCam.disabled = true;
   } catch (e) {
-    alert("Erro ao acessar a câmera.");
+    alert("Erro ao acessar a câmera: " + e.message);
   }
 });
 
 btnCapture.addEventListener("click", () => {
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  const w = video.videoWidth || 320;
+  const h = video.videoHeight || 240;
+  canvas.width = w;
+  canvas.height = h;
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(video, 0, 0);
-  const imageUrl = canvas.toDataURL("image/png");
-  lastImage.src = imageUrl;
-  localStorage.setItem("lastPhoto", imageUrl);
+  ctx.drawImage(video, 0, 0, w, h);
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    lastImage.src = url;
+    downloadLink.href = url;
+  }, "image/png");
 });
 
 btnStopCam.addEventListener("click", () => {
-  if (stream) stream.getTracks().forEach(t => t.stop());
-  video.srcObject = null;
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+    video.srcObject = null;
+  }
   btnCapture.disabled = true;
   btnStopCam.disabled = true;
   btnStartCam.disabled = false;
 });
-
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js")
-    .then(() => console.log("Service Worker registrado!"));
-}

@@ -1,8 +1,8 @@
 {
   "name": "StockSnap",
   "short_name": "StockSnap",
-  "description": "Acompanhe ações, localização e tire fotos com seu PWA!",
-  "start_url": "./index.html",
+  "description": "Acompanhe ações e registre observações com fotos e geolocalização!",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#9e21e6",
