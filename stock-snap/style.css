@@ -2,84 +2,129 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Inter", Arial, sans-serif;
 }
 
 body {
-  font-family: "Inter", sans-serif;
-  background-color: #f8f9fa;
-  color: #333;
-  padding: 1rem;
+  background: #f9f9fb;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
   text-align: center;
-}
-
-h1 {
-  color: #9e21e6;
-  margin-bottom: 1rem;
-}
-
-section {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-h2 {
-  color: #6b21a8;
-  margin-bottom: 0.5rem;
-}
-
-button {
-  background: #9e21e6;
+  padding: 2rem 1rem 1.5rem;
+  background: linear-gradient(135deg, #9e21e6, #c45bff);
   color: white;
-  border: none;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
+  border-radius: 0 0 1.5rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(158, 33, 230, 0.3);
+}
+
+.app-header h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.app-header p {
   font-size: 1rem;
-  margin: 0.3rem;
-  width: 80%;
-  max-width: 250px;
+  font-weight: 400;
+  opacity: 0.95;
+  line-height: 1.4;
 }
 
-button:hover {
-  background: #b84eff;
+main {
+  flex: 1;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.card {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.map-link, .download-link {
-  display: inline-block;
-  margin-top: 0.5rem;
-  color: #6b21a8;
-  text-decoration: none;
-  font-size: 0.9rem;
+.card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #9e21e6;
 }
 
-.map-link:hover, .download-link:hover {
-  text-decoration: underline;
-}
-
-video, img {
-  width: 100%;
-  max-width: 400px;
-  border-radius: 12px;
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
   margin-top: 0.8rem;
 }
 
-.geo-buttons, .camera-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+button,
+a#openMaps,
+a#downloadLink {
+  background: #9e21e6;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
 }
 
-@media (min-width: 600px) {
-  button {
-    width: auto;
+button:hover,
+a:hover {
+  background: #7e1bb5;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+video {
+  width: 100%;
+  border-radius: 0.6rem;
+  margin-bottom: 0.8rem;
+  background: #000;
+}
+
+img#lastImage {
+  width: 100%;
+  border-radius: 0.6rem;
+  margin: 0.5rem 0;
+  object-fit: cover;
+}
+
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+
+@media (max-width: 600px) {
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+  .app-header p {
+    font-size: 0.95rem;
+  }
+  .card h2 {
+    font-size: 1.1rem;
+  }
+  button,
+  a {
+    flex: 1 1 100%;
+    text-align: center;
   }
 }
